@@ -17,7 +17,7 @@ export function NavBar() {
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
             <Link
-              href="https://twitter.com/livekitted"
+              href="/user/edituser"
               target="_blank"
               rel="noreferrer"
             >

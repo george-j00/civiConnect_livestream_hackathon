@@ -112,7 +112,7 @@ const Page: React.FC = () => {
 
           <button
             type="submit"
-            className=" bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
+            className=" bg-black text-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
           >
             Continue
           </button>

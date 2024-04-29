@@ -6,7 +6,7 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { googleAuth, userLogin } from "@/axios/axiosConfig";
 import { useAppDispatch } from "@/lib/hooks";
-import { setLogin,updateProfileReducer } from "@/lib/actions/features/auth.slice";
+import { setLogin,updateProfile } from "@/lib/actions/features/auth.slice";
 import {
   GoogleAuthProvider,
   getAuth,
@@ -73,7 +73,7 @@ const Page: React.FC = () => {
             );
 
             if (response?.data.phone) {
-              dispatch(updateProfileReducer(response?.data));
+              dispatch(updateProfile(response?.data));
             }
 
             await setCookie(response?.token);
@@ -123,7 +123,7 @@ const Page: React.FC = () => {
         })
       );
       if (response?.data.phone) {
-        dispatch(updateProfileReducer(response?.data));
+        dispatch(updateProfile(response?.data));
         console.log("hello");
       }
 

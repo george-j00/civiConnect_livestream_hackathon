@@ -19,13 +19,13 @@ export const authSlice = createSlice({
             state.user = null;
             state.isLoggedIn = false;
         }, 
-        updateProfileReducer: (state, action) => {
-            state.user = null;
-            state.user = action.payload.user
-        },
+        updateProfile: (state, action) => {
+            console.log('Update profile action payload:', action.payload);
+            state.user = action.payload;
+          }
     },
     
 });
 
-export const { setLogin, setLogout , updateProfileReducer } = authSlice.actions;
+export const { setLogin, setLogout , updateProfile } = authSlice.actions;
 export default authSlice.reducer;
