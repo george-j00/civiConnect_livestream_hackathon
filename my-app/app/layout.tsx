@@ -21,11 +21,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <StoreProvider>
-          <NavBar/>
-      {children}
-          <Footer/>
-      </StoreProvider>
+        <StoreProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <main className="flex min-h-screen flex-col bg-background font-sans antialiased text-foreground">
+            <NavBar />
+            {children}
+            <Footer />
+          </main>
+          </ThemeProvider>
+        </StoreProvider>
       </body>
     </html>
   );

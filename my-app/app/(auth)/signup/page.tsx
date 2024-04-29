@@ -77,7 +77,7 @@ const Page: React.FC = () => {
             }
 
             await setCookie(response?.token);
-            router.push(`/Match`);
+            router.push(`/`);
             toast({
               variant: "destructive",
               description: "Login successful",
@@ -144,19 +144,19 @@ const Page: React.FC = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center bg-white min-h-screen">
+      <div className="flex items-center justify-center  min-h-screen">
         <div className="w-full max-w-md p-8 rounded">
           <div className="mx-auto   rounded-full ">
          
           </div>
-          <h2 className="text-lg text-black font-bold text-center">
+          <h2 className="text-lg  font-bold text-center">
           Civi Connect
           </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
               <label
                 htmlFor="email"
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block  text-sm font-bold mb-2"
               >
                 Email
               </label>
@@ -167,7 +167,7 @@ const Page: React.FC = () => {
                 placeholder="john.doe@example.com"
                 className={`border ${
                   errors.email ? "border-red-500" : "border-gray-300"
-                } text-black rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300`}
+                }  rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300`}
                 onChange={handleInputChange}
                 value={formValues.email}
               />
@@ -181,7 +181,7 @@ const Page: React.FC = () => {
             <div className="mb-4">
               <label
                 htmlFor="password"
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block  text-sm font-bold mb-2"
               >
                 Password
               </label>
@@ -192,7 +192,7 @@ const Page: React.FC = () => {
                 placeholder="Enter your password"
                 className={`border ${
                   errors.password ? "border-red-500" : "border-gray-300"
-                } text-black rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300`}
+                }  rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300`}
                 onChange={handleInputChange}
                 value={formValues.password}
               />
@@ -206,7 +206,7 @@ const Page: React.FC = () => {
             {error && <p className="text-red-500">{error}</p>}
             <button
               type="submit"
-              className="text-white bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
+              className="bg-black  font-medium text-gray-300 border rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
             >
               Continue
             </button>
@@ -218,11 +218,11 @@ const Page: React.FC = () => {
 
           <div className="flex mt-2 items-center">
             <div className="flex-grow border-b border-gray-400"></div>
-            <span className="text-black mx-4">or sign up with</span>
+            <span className=" mx-4">or sign up with</span>
             <div className="flex-grow border-b border-gray-400"></div>
           </div>
 
-          <div className="flex text-black justify-center">
+          <div className="flex  justify-center">
             <button
               className="flex items-center justify-center mt-4 p-2 border border-gray-300 rounded cursor-pointer"
               onClick={handleGoogleLogin}
@@ -234,7 +234,7 @@ const Page: React.FC = () => {
               />
             </button>
           </div>
-          <p className="text-sm text-black text-center mt-2">
+          <p className="text-sm  text-center mt-2">
             Don't have an account?{" "}
             <a href="/signin" className="text-blue-500 hover:underline">
               Sign up

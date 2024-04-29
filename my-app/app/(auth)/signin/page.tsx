@@ -49,15 +49,15 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-white min-h-screen ">
+    <div className="flex items-center justify-center  min-h-screen ">
      
       <div className="w-full max-w-md p-8 rounded ">
-      <h2 className="text-lg text-black font-bold text-center">
+      <h2 className="text-lg  font-bold text-center">
           Civi Connect
           </h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
+            <label htmlFor="email" className="block  text-sm font-bold mb-2">
               Email
             </label>
             <input
@@ -65,7 +65,7 @@ const Page: React.FC = () => {
               id="email"
               {...register('email')}
               placeholder="john.doe@example.com"
-              className={`border ${errors.email ? 'border-red-500' : 'border-gray-300'} text-black rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300`}
+              className={`border ${errors.email ? 'border-red-500' : 'border-gray-300'}  rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300`}
               onChange={handleInputChange}
               value={formValues.email}
             />
@@ -75,7 +75,7 @@ const Page: React.FC = () => {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-2">
+            <label htmlFor="username" className="block  text-sm font-bold mb-2">
               Username
             </label>
             <input
@@ -83,7 +83,7 @@ const Page: React.FC = () => {
               id="username"
               {...register('username')}
               placeholder="Enter your username"
-              className={`border ${errors.username ? 'border-red-500' : 'border-gray-300'} text-black rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300`}
+              className={`border ${errors.username ? 'border-red-500' : 'border-gray-300'}  rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300`}
               onChange={handleInputChange}
               value={formValues.username}
             />
@@ -93,7 +93,7 @@ const Page: React.FC = () => {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="password" className="block text-black text-gray-700 text-sm font-bold mb-2">
+            <label htmlFor="password" className="block  text-gray-700 text-sm font-bold mb-2">
               Password
             </label>
             <input
@@ -112,7 +112,7 @@ const Page: React.FC = () => {
 
           <button
             type="submit"
-            className="text-white bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
+            className=" bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
           >
             Continue
           </button>

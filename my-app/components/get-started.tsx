@@ -50,13 +50,6 @@ export default function HomeForm() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          {/* <DropdownMenuItem
-            onClick={() => router.push(`/setup?channel=${slug}`)}
-            className="flex items-center gap-2"
-          >
-            <Icons.uploadCloud className="h-4 w-4" />
-            Broadcast via LKC Ingress
-          </DropdownMenuItem> */}
           <DropdownMenuItem
             onClick={() => router.push(`/admin/channel/${slug}/host`)}
             className="flex items-center gap-2"
@@ -66,13 +59,6 @@ export default function HomeForm() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Button
-        variant="secondary"
-        disabled={!validSlug}
-        onClick={() => router.push(`/user/channel/${slug}`)}
-      >
-        Join as viewer
-      </Button>
     </div>
   );
 }
