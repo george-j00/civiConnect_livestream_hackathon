@@ -45,14 +45,15 @@ export default function Page() {
 
   const onSubmit = async (data: FormData): Promise<any> => {
     try {
+      console.log(data, "the data is here");
       const isValid = await trigger();
       if (isValid) {
         const response = await adminLogin(data);
-        console.log(response?.user, "the response");
+        console.log(response.dataUser, "the response");
 
         if (response !== "") {
-          if (response?.data !== null) {
-            router.push(`/admin/dashboard`);
+          if (response?.dataUser !== null) {
+            router.push(`/admin/channel/test/host`);
             toast({
               variant: "destructive",
               description: "Login successful",
