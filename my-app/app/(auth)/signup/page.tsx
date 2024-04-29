@@ -234,10 +234,10 @@ const Page: React.FC = () => {
               />
             </button>
           </div>
-          <p className="text-sm text-black text-left mt-10">
+          <p className="text-sm text-black text-center mt-2">
             Don't have an account?{" "}
             <a href="/signin" className="text-blue-500 hover:underline">
-              Sign in
+              Sign up
             </a>
           </p>
         </div>

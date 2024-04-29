@@ -49,7 +49,8 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-white min-h-screen">
+    <div className="flex items-center justify-center bg-white min-h-screen ">
+     
       <div className="w-full max-w-md p-8 rounded ">
       <h2 className="text-lg text-black font-bold text-center">
           Civi Connect
@@ -116,6 +117,12 @@ const Page: React.FC = () => {
             Continue
           </button>
         </form>
+        <p className="text-sm text-black text-center mt-2">
+            Already have an account?{" "}
+            <a href="/signup" className="text-blue-500 hover:underline">
+              Sign in
+            </a>
+          </p>
       </div>
     </div>
   );

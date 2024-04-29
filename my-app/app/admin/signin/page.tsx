@@ -53,7 +53,7 @@ export default function Page() {
 
         if (response !== "") {
           if (response?.dataUser !== null) {
-            router.push(`/admin/channel/test/host`);
+            router.push(`/admin/`);
             toast({
               variant: "destructive",
               description: "Login successful",

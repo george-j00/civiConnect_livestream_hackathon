@@ -1,4 +1,4 @@
-import LandForm from "@/components/user-landing";
+import GetStartedForm from "@/components/get-started";
 import { Icons } from "@/components/ui/icons";
 import { type Metadata } from "next";
 
@@ -20,8 +20,8 @@ export default function IndexPage() {
             Open source livestreaming app built for civic 
           
           </p>
-          <p>Join As A User:</p>
-          <LandForm />
+          <p>To get started, enter a channel ID below and select an option:</p>
+          <GetStartedForm />
         </div>
       </div>
     </section>
