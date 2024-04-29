@@ -10,6 +10,7 @@ import {
   EDIT_ENDPOINT,
   CHANGE_PASS,
   GOOGLE_ENDPOINT,
+  ADMIN_ENDPOINT,
 } from "./endpoints";
 
 const client: AxiosInstance = axios.create({
@@ -145,3 +146,16 @@ export const editUserProfile = async (userId: string, updatedUserData: any) => {
   }
 };
 
+
+
+export const adminLogin = async (userData: FormData) => {
+    try {
+      const res = await client.post(ADMIN_ENDPOINT, userData);
+      console.log(res.data);
+      return res.data;
+    } catch (error) {
+      console.error("Error during user login:", error);
+      throw error;
+    }
+  };
+  

@@ -1,31 +1,17 @@
-"use client";
-import React, { useState } from "react";
+"use client"
+import React,{useState} from "react";
+import {z} from "zod"
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { googleAuth, userLogin } from "@/axios/axiosConfig";
-import { useAppDispatch } from "@/lib/hooks";
-import { setLogin,updateProfileReducer } from "@/lib/actions/features/auth.slice";
-import {
-  GoogleAuthProvider,
-  getAuth,
-  signInWithPopup,
-  UserCredential,
-  OAuthCredential,
-} from "firebase/auth";
-import { setCookie } from "@/lib/actions/features/authCookies";
+import { adminLogin } from "@/axios/axiosConfig";
 import { toast } from "@/components/ui/use-toast";
-import { app } from "@/firebase/config";
-
 
 interface FormData {
   email: string;
   password: string;
   status?: boolean;
 }
-const provider = new GoogleAuthProvider();
-const auth = getAuth(app);
 
 const schema = z.object({
   email: z
@@ -38,7 +24,8 @@ const schema = z.object({
     .nonempty({ message: "Password is required" }),
 });
 
-const Page: React.FC = () => {
+export default function Page() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -48,46 +35,32 @@ const Page: React.FC = () => {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  
+ 
+  const [error , setError] = useState<string>();
   const [formValues, setFormValues] = useState<FormData>({
     email: "",
     password: "",
   });
-  console.log(formValues);
 
   const onSubmit = async (data: FormData): Promise<any> => {
     try {
       const isValid = await trigger();
       if (isValid) {
-        const response = await userLogin(data);
+        const response = await adminLogin(data);
         console.log(response?.user, "the response");
 
         if (response !== "") {
-          if (response?.user.status === false) {
-            dispatch(
-              setLogin({
-                user: response?.user,
-              })
-            );
-
-            if (response?.data.phone) {
-              dispatch(updateProfileReducer(response?.data));
-            }
-
-            await setCookie(response?.token);
-            router.push(`/Match`);
+          if (response?.data !== null) {
+            router.push(`/admin/dashboard`);
             toast({
               variant: "destructive",
               description: "Login successful",
             });
           } else {
-            setError("The user is blocked by admin");
+            setError("Invalid username or password");
           }
-        } else {
-          setError("Invalid username or password");
-        }
+        } 
       }
     } catch (error) {
       console.error("Error during form submission:", error);
@@ -103,55 +76,16 @@ const Page: React.FC = () => {
     });
   };
 
-  const handleGoogleLogin = async (userData: any) => {
-    console.log("button clicked");
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential?.accessToken || "";
-      const user = result.user;
-      const userData: any = {
-        email: user.email,
-        username: user.displayName,
-      };
-      console.log(userData, "the google auth data");
-      const response = await googleAuth(userData);
-      console.log(response);
-      dispatch(
-        setLogin({
-          user: response?.user,
-        })
-      );
-      if (response?.data.phone) {
-        dispatch(updateProfileReducer(response?.data));
-        console.log("hello");
-      }
-
-      await setCookie(response?.token);
-      router.push(`/`);
-      toast({
-        variant: "destructive",
-        description: "Login successful",
-      });
-    } catch (error: any) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const email = error.customData?.email;
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // Handle error
-    }
-  };
-
   return (
     <>
       <div className="flex items-center justify-center bg-white min-h-screen">
-        <div className="w-full max-w-md p-8 rounded">
-          <div className="mx-auto   rounded-full ">
-         
+        <div className="w-full max-w-md p-8  rounded ">
+          <div className="mx-auto mb-4 w-60 h-[100px]  rounded-full overflow-hidden">
           </div>
-          <h2 className="text-lg text-black font-bold text-center">
+          <h2 className="text-xl text-black font-bold text-center">
           Civi Connect
           </h2>
+          <h2 className="text-lg   text-black text-center">Admin Sign in</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
               <label
@@ -216,34 +150,8 @@ const Page: React.FC = () => {
             </a>
           </form>
 
-          <div className="flex mt-2 items-center">
-            <div className="flex-grow border-b border-gray-400"></div>
-            <span className="text-black mx-4">or sign up with</span>
-            <div className="flex-grow border-b border-gray-400"></div>
-          </div>
-
-          <div className="flex text-black justify-center">
-            <button
-              className="flex items-center justify-center mt-4 p-2 border border-gray-300 rounded cursor-pointer"
-              onClick={handleGoogleLogin}
-            >
-              <img
-                src="https://img.icons8.com/color/48/000000/google-logo.png"
-                alt="Google Icon"
-                className="w-7 h-7"
-              />
-            </button>
-          </div>
-          <p className="text-sm text-black text-left mt-10">
-            Don't have an account?{" "}
-            <a href="/signin" className="text-blue-500 hover:underline">
-              Sign in
-            </a>
-          </p>
         </div>
       </div>
     </>
   );
-};
-
-export default Page;
+}

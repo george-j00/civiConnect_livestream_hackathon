@@ -5,3 +5,4 @@ export const OTP_ENDPOINT = "/auth/register/send-otp";
 export const EDIT_ENDPOINT = "/user/editUser";
 export const CHANGE_PASS = '/auth/changePassword';
 export const GOOGLE_ENDPOINT = "/auth/googleAuth";
+export const ADMIN_ENDPOINT = "/auth/admin";
