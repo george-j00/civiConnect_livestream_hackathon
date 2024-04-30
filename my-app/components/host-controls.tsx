@@ -5,6 +5,8 @@ import { confirmPasswordReset } from "firebase/auth";
 import { Track, createLocalTracks, type LocalTrack } from "livekit-client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import io from 'socket.io-client';
+import { AssemblyAI } from "assemblyai";
+
 
 interface Props {
   slug: string;
@@ -51,6 +53,10 @@ export default function HostControls({ slug }: Props) {
   useEffect(() => {
     let audioContext:any = null;
     let mediaStream:any = null;
+    const client = new AssemblyAI({
+      apiKey: "b2a76c0a62fc48d78cc02327dd8ad915",
+    });
+    
   
     const startAudioCapture = async () => {
       try {
