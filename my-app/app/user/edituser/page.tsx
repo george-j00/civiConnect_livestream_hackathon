@@ -15,13 +15,18 @@ const EditUserPage = () => {
     }
   }, [user]);
 
-  const goBack = ()  =>{
-    router.push('/');
-  }
+  const goBack = () => {
+    router.push("/");
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <button className="absolute mt-20 top-0 left-0 m-4 bg-black border text-white px-4 py-2 rounded-lg z-10" onClick={goBack}>Back</button>
+      <button
+        className="absolute mt-20 top-0 left-0 m-4 bg-black border text-white px-4 py-2 rounded-lg z-10"
+        onClick={goBack}
+      >
+        Back
+      </button>
       <div className="flex flex-col items-center justify-center w-full">
         <div className="flex space-x-10 justify-center items-center">
           <img
@@ -61,4 +66,3 @@ const EditUserPage = () => {
 };
 
 export default EditUserPage;
-

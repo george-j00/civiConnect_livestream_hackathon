@@ -112,12 +112,12 @@ const Page: React.FC = () => {
 
           <button
             type="submit"
-            className=" bg-black text-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
+            className=" bg-black  border text-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
           >
             Continue
           </button>
         </form>
-        <p className="text-sm text-black text-center mt-2">
+        <p className="text-sm text-gray-300 text-center mt-2">
             Already have an account?{" "}
             <a href="/signup" className="text-blue-500 hover:underline">
               Sign in
