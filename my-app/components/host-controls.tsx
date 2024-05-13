@@ -8,6 +8,170 @@ import io from 'socket.io-client';
 // import { AssemblyAI } from "assemblyai";
 
 
+
+console.log('hello world');
+
+
+// const CHUNK_SIZE = 1024; // Define your desired chunk size
+// const DELAY_BETWEEN_CHUNKS = 100000;
+
+// interface Props {
+//   slug: string;
+// }
+
+// export default function HostControls({ slug }: Props) {
+//   const [videoTrack, setVideoTrack] = useState<LocalTrack>();
+//   const [audioTrack, setAudioTrack] = useState<LocalTrack | any>();
+//   const [isPublishing, setIsPublishing] = useState(false);
+//   const [isUnpublishing, setIsUnpublishing] = useState(false);
+//   const previewVideoEl = useRef<HTMLVideoElement>(null);
+//   let socket :any;
+
+//   const { localParticipant } = useLocalParticipant();
+
+
+
+//   const createTracks = async () => {
+//     const tracks = await createLocalTracks({ audio: true, video: true });
+//     tracks.forEach((track) => {
+//       switch (track.kind) {
+//         case Track.Kind.Video: {
+//           if (previewVideoEl?.current) {
+//             track.attach(previewVideoEl.current);
+//           }
+//           setVideoTrack(track);
+//           break;
+//         }
+//         case Track.Kind.Audio: {
+//           setAudioTrack(track);
+//           break;
+//         }
+//       }
+//     });
+//   };
+
+
+//   const sendAudioDataInChunks = (dataArray: Uint8Array) => {
+//     let offset = 0;
+
+//     // Define a function to send each chunk with a delay
+//     function sendChunk() {
+//       if (offset >= dataArray.length) {
+//         // All data sent
+//         return;
+//       }
+
+//       // Calculate the end index of the current chunk
+//       const endIndex = Math.min(offset + CHUNK_SIZE, dataArray.length);
+
+//       // Extract the current chunk (slice operation creates a new array copy)
+//       const chunk = dataArray.slice(offset, endIndex);
+
+//       // Emit the chunk as a buffer
+//       socket.emit("audioData", chunk.buffer);
+
+//       // Update the offset for the next chunk
+//       offset = endIndex;
+
+//       // Schedule the next chunk
+//       setTimeout(sendChunk, DELAY_BETWEEN_CHUNKS);
+//     }
+
+//     // Start sending chunks
+//     sendChunk();
+//   };
+
+//   useEffect(() => {
+//     socket = io("http://localhost:3005"); // Replace with your server URL
+
+//     return () => {
+//       if (socket.current) {
+//         socket.disconnect();
+//       }
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     let audioContext: any = null;
+//     let mediaStream: any = null;
+
+//     const startAudioCapture = async () => {
+//       try {
+//         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+//         mediaStream = stream;
+//         audioContext = new AudioContext();
+//         const source = audioContext.createMediaStreamSource(stream);
+//         source.connect(audioContext.destination);
+
+//         const analyser = audioContext.createAnalyser();
+//         source.connect(analyser);
+//         analyser.fftSize = 2048;
+//         const bufferLength = analyser.frequencyBinCount;
+//         const dataArray = new Uint8Array(bufferLength);
+
+//         const logAudioData = () => {
+//           analyser.getByteFrequencyData(dataArray);
+//           sendAudioDataInChunks(dataArray); // Ensure a copy is sent
+//           requestAnimationFrame(logAudioData);
+//         };
+
+//         logAudioData();
+//       } catch (error) {
+//         console.error("Error accessing microphone:", error);
+//       }
+//     };
+
+//     startAudioCapture();
+
+//     return () => {
+//       if (audioContext) {
+//         audioContext.close();
+//       }
+//       if (mediaStream) {
+//         mediaStream.getTracks().forEach((track : any) => track.stop());
+//       }
+//     };
+//   }, []);
+
+
+//   const togglePublishing = useCallback(async () => {
+//     if (isPublishing && localParticipant) {
+//       setIsUnpublishing(true);
+
+//       if (videoTrack) {
+//         void localParticipant.unpublishTrack(videoTrack);
+//       }
+//       if (audioTrack) {
+//         void localParticipant.unpublishTrack(audioTrack); 
+//       }
+
+//       await createTracks();
+
+//       setTimeout(() => {
+//         setIsUnpublishing(false);
+//       }, 2000);
+//     } else if (localParticipant) {
+//       if (videoTrack) {
+//         void localParticipant.publishTrack(videoTrack);
+//       }
+//       if (audioTrack) {
+//         void localParticipant.publishTrack(audioTrack);
+//         //send audio track to the sendAudioChunks function 
+//         // sendAudioChunks(audioTrack); 
+//       }
+//     }
+
+//     setIsPublishing((prev) => !prev);
+//   }, [audioTrack, isPublishing, localParticipant, videoTrack]);
+
+
+
+const CHUNK_SIZE = 1024;
+const DELAY_BETWEEN_CHUNKS = 100000;
+
+// Define noise gate threshold (adjust as needed)
+const NOISE_GATE_THRESHOLD = 50;
+
 interface Props {
   slug: string;
 }
@@ -21,6 +185,8 @@ export default function HostControls({ slug }: Props) {
   let socket :any;
 
   const { localParticipant } = useLocalParticipant();
+
+  const noiseGateRef = useRef<number>(NOISE_GATE_THRESHOLD);
 
   const createTracks = async () => {
     const tracks = await createLocalTracks({ audio: true, video: true });
@@ -40,9 +206,35 @@ export default function HostControls({ slug }: Props) {
       }
     });
   };
-  const audioTrackRef:any = useRef(null);
+
+  const sendAudioDataInChunks = (dataArray: Uint8Array) => {
+    let offset = 0;
+
+    function sendChunk() {
+      if (offset >= dataArray.length) {
+        return;
+      }
+
+      const endIndex = Math.min(offset + CHUNK_SIZE, dataArray.length);
+      const chunk = dataArray.slice(offset, endIndex);
+      
+      // Apply noise gate
+      const isSpeech = chunk.some(value => value > noiseGateRef.current);
+      
+      if (isSpeech) {
+        socket.emit("audioData", chunk.buffer);
+      }
+
+      offset = endIndex;
+      setTimeout(sendChunk, DELAY_BETWEEN_CHUNKS);
+    }
+
+    sendChunk();
+  };
+
   useEffect(() => {
-    socket = io('http://localhost:3003'); 
+    socket = io("http://localhost:3005");
+
     return () => {
       if (socket.current) {
         socket.disconnect();
@@ -51,6 +243,7 @@ export default function HostControls({ slug }: Props) {
   }, []);
 
   useEffect(() => {
+<<<<<<< HEAD
     let audioContext:any = null;
     let mediaStream:any = null;
     const client = new AssemblyAI({
@@ -58,6 +251,11 @@ export default function HostControls({ slug }: Props) {
     });
     
   
+=======
+    let audioContext: any = null;
+    let mediaStream: any = null;
+
+>>>>>>> new-branch
     const startAudioCapture = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -65,51 +263,37 @@ export default function HostControls({ slug }: Props) {
         audioContext = new AudioContext();
         const source = audioContext.createMediaStreamSource(stream);
         source.connect(audioContext.destination);
-        audioTrackRef.current = stream.getAudioTracks()[0];
+
         const analyser = audioContext.createAnalyser();
         source.connect(analyser);
-        analyser.fftSize = 2048; 
+        analyser.fftSize = 2048;
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
+
         const logAudioData = () => {
           analyser.getByteFrequencyData(dataArray);
-          console.log(dataArray); 
-          socket.emit('audioData', dataArray.buffer);
+          sendAudioDataInChunks(dataArray);
           requestAnimationFrame(logAudioData);
         };
+
         logAudioData();
       } catch (error) {
-        console.error('Error accessing microphone:', error);
+        console.error("Error accessing microphone:", error);
       }
     };
-  
+
     startAudioCapture();
-  
+
     return () => {
       if (audioContext) {
         audioContext.close();
       }
       if (mediaStream) {
-        mediaStream.getTracks().forEach((track:any) => track.stop());
+        mediaStream.getTracks().forEach((track : any) => track.stop());
       }
     };
   }, []);
 
-
-  
-
-  useEffect(() => {
-    
-    void createTracks();
-  }, []);
-
-  useEffect(() => {
-
-    return () => {
-      videoTrack?.stop();
-      audioTrack?.stop();
-    };
-  }, [videoTrack, audioTrack]);
 
   const togglePublishing = useCallback(async () => {
     if (isPublishing && localParticipant) {
@@ -133,15 +317,12 @@ export default function HostControls({ slug }: Props) {
       }
       if (audioTrack) {
         void localParticipant.publishTrack(audioTrack);
-        //send audio track to the sendAudioChunks function 
-        // sendAudioChunks(audioTrack); 
       }
     }
 
     setIsPublishing((prev) => !prev);
   }, [audioTrack, isPublishing, localParticipant, videoTrack]);
-
-
+  
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
