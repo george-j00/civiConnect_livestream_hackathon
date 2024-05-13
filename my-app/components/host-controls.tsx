@@ -7,6 +7,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import io from 'socket.io-client';
 
 
+console.log('hello world');
+
+
 // const CHUNK_SIZE = 1024; // Define your desired chunk size
 // const DELAY_BETWEEN_CHUNKS = 100000;
 
