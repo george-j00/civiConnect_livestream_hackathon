@@ -5,7 +5,7 @@ import { confirmPasswordReset } from "firebase/auth";
 import { Track, createLocalTracks, type LocalTrack } from "livekit-client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import io from 'socket.io-client';
-import { AssemblyAI } from "assemblyai";
+// import { AssemblyAI } from "assemblyai";
 
 
 interface Props {
